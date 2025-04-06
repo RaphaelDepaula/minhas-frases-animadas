@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frase Aleatória Animada</title>
+    <style>
+        /* Estilos Gerais */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Garante que o corpo ocupe toda a altura da tela */
+            background-color: #f0f0f0; /* Cor de fundo suave */
+            font-family: sans-serif; /* Fonte padrão */
+            overflow: hidden; /* Evita barras de rolagem desnecessárias da animação */
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 80%;
+        }
+
+        #frase-aleatoria {
+            font-size: 2.5em; /* Tamanho inicial da fonte */
+            min-height: 100px; /* Altura mínima para evitar saltos de layout */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.4;
+            color: #333;
+            /* A animação será aplicada via JS */
+        }
+
+        /* --- Estilos de Fonte (Classes) --- */
+        .fonte-serif {
+            font-family: 'Georgia', serif;
+            font-weight: normal;
+        }
+
+        .fonte-script {
+            font-family: 'Brush Script MT', 'cursive';
+             font-weight: normal;
+       }
+
+        .fonte-monospace {
+            font-family: 'Courier New', monospace;
+             font-weight: bold;
+        }
+
+        .fonte-fantasy {
+            font-family: 'Papyrus', 'fantasy';
+             font-weight: normal;
+        }
+
+         .fonte-impact {
+            font-family: 'Impact', 'Haettenschweiler', 'Arial Narrow Bold', sans-serif;
+             font-weight: bold;
+             text-transform: uppercase;
+             color: #D2691E; /* Cor diferente para destaque */
+         }
+
+        /* --- Animações (Keyframes e Classes) --- */
+
+        /* Fade In */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .anim-fade-in {
+            animation: fadeIn 1.5s ease-in-out forwards;
+        }
+
+        /* Slide In de Baixo */
+        @keyframes slideInFromBottom {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .anim-slide-in {
+            animation: slideInFromBottom 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        /* Scale Up */
+        @keyframes scaleUp {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .anim-scale-up {
+            animation: scaleUp 1s ease-out forwards;
+        }
+
+        /* Rotate In */
+         @keyframes rotateIn {
+            from { transform: rotate(-90deg) scale(0.1); opacity: 0; }
+            to { transform: rotate(0deg) scale(1); opacity: 1; }
+        }
+        .anim-rotate-in {
+            animation: rotateIn 1.2s ease-in-out forwards;
+        }
+
+        /* Blur In */
+        @keyframes blurIn {
+            from { filter: blur(10px); opacity: 0; }
+            to { filter: blur(0); opacity: 1; }
+        }
+        .anim-blur-in {
+             animation: blurIn 1.5s ease-out forwards;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="frase-aleatoria">
+            Carregando frase...
+        </div>
+    </div>
+
+    <script>
+        // --- Banco de Dados de Frases (Simples Array) ---
+        const frases = [
+            "A persistência é o caminho do êxito.",
+            "O único lugar onde o sucesso vem antes do trabalho é no dicionário.",
+            "Imagine uma nova história para sua vida e acredite nela.",
+            "Acredite em si próprio e chegará um dia em que os outros não terão outra escolha senão acreditar com você.",
+            "A criatividade é a inteligência se divertindo.",
+            "Não espere por oportunidades extraordinárias. Agarre ocasiões comuns e torne-as grandes.",
+            "Sua única limitação é você mesmo.",
+            "Comece onde você está. Use o que você tem. Faça o que você pode.",
+            "O otimismo é a fé em ação. Nada se pode levar a efeito sem otimismo.",
+            "A vida é 10% o que acontece a você e 90% como você reage a isso.",
+            "Para ter sucesso, seu desejo de sucesso deve ser maior que seu medo do fracasso.",
+            "Um dia de cada vez, que é para não perder as boas surpresas da vida.",
+            "Seja a mudança que você deseja ver no mundo.",
+            "A melhor maneira de prever o futuro é criá-lo."
+        ];
+
+        // --- Listas de Classes CSS (Fontes e Animações) ---
+        const estilosFonte = ['fonte-serif', 'fonte-script', 'fonte-monospace', 'fonte-fantasy', 'fonte-impact'];
+        const animacoes = ['anim-fade-in', 'anim-slide-in', 'anim-scale-up', 'anim-rotate-in', 'anim-blur-in'];
+
+        // --- Elemento HTML onde a frase será exibida ---
+        const elementoFrase = document.getElementById('frase-aleatoria');
+
+        // --- Função para atualizar a frase ---
+        function atualizarFrase() {
+            // 1. Escolher frase aleatória
+            const indiceFrase = Math.floor(Math.random() * frases.length);
+            const fraseSelecionada = frases[indiceFrase];
+
+            // 2. Escolher estilo de fonte aleatório
+            const indiceFonte = Math.floor(Math.random() * estilosFonte.length);
+            const estiloSelecionado = estilosFonte[indiceFonte];
+
+            // 3. Escolher animação aleatória
+            const indiceAnimacao = Math.floor(Math.random() * animacoes.length);
+            const animacaoSelecionada = animacoes[indiceAnimacao];
+
+            // 4. Limpar classes anteriores (fontes e animações)
+            // Remove todas as classes de fonte possíveis
+            estilosFonte.forEach(cls => elementoFrase.classList.remove(cls));
+            // Remove todas as classes de animação possíveis
+            animacoes.forEach(cls => elementoFrase.classList.remove(cls));
+
+            // Forçar um "reflow" para garantir que a animação reinicie se a mesma for selecionada novamente
+            // Truque comum: ler uma propriedade como offsetWidth
+            void elementoFrase.offsetWidth;
+
+            // 5. Atualizar o texto da frase
+            elementoFrase.textContent = fraseSelecionada;
+
+            // 6. Adicionar as novas classes (fonte e animação)
+            elementoFrase.classList.add(estiloSelecionado);
+            elementoFrase.classList.add(animacaoSelecionada);
+
+            console.log(`Frase atualizada: "${fraseSelecionada}" | Fonte: ${estiloSelecionado} | Animação: ${animacaoSelecionada}`);
+        }
+
+        // --- Lógica de Tempo ---
+        // Chama a função imediatamente ao carregar a página
+        atualizarFrase();
+
+        // Configura um intervalo para chamar a função a cada 2 minutos
+        // 2 minutos = 2 * 60 segundos * 1000 milissegundos
+        setInterval(atualizarFrase, 2 * 60 * 1000);
+
+    </script>
+
+</body>
+</html>
